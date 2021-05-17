@@ -22,3 +22,8 @@ npm install body-parser --save
 ```
 npm install cors --save
 ```
+
+## Module: JsonWebToken
+```
+npm install jsonwebtoken --save
+```
