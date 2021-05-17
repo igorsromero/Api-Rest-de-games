@@ -4,9 +4,35 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const JWTSecret = "spaoksaposkaposa";
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+function auth(req, res, next) {
+    const authToken = req.headers['authorization'];
+
+    if (authToken != undefined) {
+
+        const bearer = authToken.split(' ');
+        var token = bearer[1];
+
+        jwt.verify(token, JWTSecret, (err, data) => {
+            if (err) {
+                res.status(401);
+                res.json({ err: "Token inválido!" });
+            } else {
+                req.token = token;
+                req.loggedUser = { id: data.id, email: data.email };
+                next();
+            }
+        });
+
+    } else {
+        res.status(401);
+        res.json({ err: "Token inválido!" });
+    }
+}
 
 var DB = {
     games: [
@@ -46,13 +72,13 @@ var DB = {
 }
 
 // Listar todos os jogos
-app.get("/games", (req, res) => {
+app.get("/games", auth, (req, res) => {
     res.statusCode = 200;
     res.json(DB.games);
 });
 
 // Buscar por ID
-app.get("/game/:id", (req, res) => {
+app.get("/game/:id", auth, (req, res) => {
 
     if (isNaN(req.params.id)) {
         res.sendStatus(400);
@@ -71,7 +97,7 @@ app.get("/game/:id", (req, res) => {
 });
 
 // Cadastrar um novo jogo
-app.post('/game', (req, res) => {
+app.post('/game', auth, (req, res) => {
     var { id, title, price, year } = req.body;
 
     DB.games.push({
@@ -84,7 +110,7 @@ app.post('/game', (req, res) => {
 })
 
 // Deleta um jogo
-app.delete("/game/:id", (req, res) => {
+app.delete("/game/:id", auth, (req, res) => {
     if (isNaN(req.params.id)) {
         res.sendStatus(400);
     } else {
@@ -101,7 +127,7 @@ app.delete("/game/:id", (req, res) => {
 });
 
 // Atualizar um jogo
-app.put('/game/:id', (req, res) => {
+app.put('/game/:id', auth, (req, res) => {
     if (isNaN(req.params.id)) {
         res.sendStatus(400);
     } else {
