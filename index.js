@@ -73,7 +73,7 @@ var DB = {
 
 // Listar todos os jogos
 app.get("/games", auth, (req, res) => {
-    res.statusCode = 200;
+    res.statusCode(200);
     res.json(DB.games);
 });
 
@@ -180,12 +180,12 @@ app.post("/auth", (req, res) => {
 
         } else {
             res.status(404);
-            res.json({ err: "E-mail inválido," });
+            res.json({ err: "E-mail inválido." });
         }
 
     } else {
         res.status(400);
-        res.json({ err: "E-mail inválido," });
+        res.json({ err: "E-mail inválido." });
     }
 })
 
