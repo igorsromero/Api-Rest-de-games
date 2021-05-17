@@ -1,4 +1,5 @@
 Ao rodar a aplicação e utilizar o método GET para listar todos os jogos, obtemos:
+```
 [
     {
         "id": 1,
@@ -19,24 +20,30 @@ Ao rodar a aplicação e utilizar o método GET para listar todos os jogos, obte
         "price": 30
     }
 ]
+```
 
 Buscando pelo ID 1, obtemos:
+```
 {
     "id": 1,
     "title": "Sea of Thieves",
     "year": 2020,
     "price": 60
 }
+```
 
 Ao utilizar o método POST para cadastrar o seguinte JSON:
+```
 {
     "id": 4,
     "title": "Teste",
     "price": 60,
     "year": 2012
 }
+```
 
 O resultado final, ao listar todos os jogos com o GET é:
+```
 [
     {
         "id": 1,
@@ -63,8 +70,10 @@ O resultado final, ao listar todos os jogos com o GET é:
         "year": 2012
     }
 ]
+```
 
 Agora ao usar o método DELETE e passar o ID 2, ao listar novamente os games, temos que:
+```
 [
     {
         "id": 1,
@@ -85,8 +94,10 @@ Agora ao usar o método DELETE e passar o ID 2, ao listar novamente os games, te
         "year": 2012
     }
 ]
+```
 
 Utilizando o seguinte Json, com o método PUT para editar os dados de title e price do jogo ID 1, temos que:
+```
 {
     "title": "Sea of Thieves - Gold Edition",
     "price": 120
@@ -99,3 +110,4 @@ e ao listar o jogo de ID o resultado é:
     "year": 2020,
     "price": 120
 }
+```
