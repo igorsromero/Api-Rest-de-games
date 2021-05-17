@@ -17,3 +17,8 @@ npm install express --save
 ```
 npm install body-parser --save
 ```
+
+## Module: CORS
+```
+npm install cors --save
+```
