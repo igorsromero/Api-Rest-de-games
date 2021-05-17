@@ -85,6 +85,7 @@ app.delete("/game/:id", (req, res) => {
     }
 });
 
+// Atualizar um jogo
 app.put('/game/:id', (req, res) => {
     if (isNaN(req.params.id)) {
         res.sendStatus(400);
@@ -105,7 +106,7 @@ app.put('/game/:id', (req, res) => {
             if(year != undefined){
                 game.year = year;
             }
-
+            res.sendStatus(200);
         } else {
             res.sendStatus(404);
         }

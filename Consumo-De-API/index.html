@@ -11,11 +11,18 @@
     <ul id="games"></ul>
     <hr>
     <h4>Novo game</h4>
-    <input type="text" name="idE" id="idE" placeholder="Id" data><br>
+    <input type="text" name="idE" id="idE" placeholder="Id"><br>
     <input type="text" name="title" id="title" placeholder="Título"><br>
     <input type="number" name="year" id="year" placeholder="Ano"><br>
     <input type="number" name="price" id="price" placeholder="Preço"><br>
     <button type="button" onclick="createGame()">Criar</button>
+    <hr>
+    <h4>Editar Game</h4>
+    <input type="text" name="idEEdit" id="idEEdit" placeholder="Id" readonly><br>
+    <input type="text" name="titleEdit" id="titleEdit" placeholder="Título"><br>
+    <input type="number" name="yearEdit" id="yearEdit" placeholder="Ano"><br>
+    <input type="number" name="priceEdit" id="priceEdit" placeholder="Preço"><br>
+    <button type="button" onclick="updateGame()">Editar</button>
 </head>
 
 <body>
@@ -58,7 +65,41 @@
         });
     }
 
+    function loadForm(listItem) {
+        var id = listItem.getAttribute("data-id");
+        var title = listItem.getAttribute("data-title");
+        var year = listItem.getAttribute("data-year");
+        var price = listItem.getAttribute("data-price");
+        var idField = document.getElementById("idEEdit").value = id;
+        var titleField = document.getElementById("titleEdit").value = title;
+        var yearField = document.getElementById("yearEdit").value = year;
+        var priceField = document.getElementById("priceEdit").value = price;
+    }
 
+    function updateGame() {
+        var idInput = document.getElementById("idEEdit");
+        var titleInput = document.getElementById("titleEdit");
+        var yearInput = document.getElementById("yearEdit");
+        var priceInput = document.getElementById("priceEdit");
+
+        var game = {
+            id: idInput.value,
+            title: titleInput.value,
+            year: yearInput.value,
+            price: priceInput.value
+        }
+
+        var id = idInput.value;
+
+        axios.put("http://localhost:8080/game/" + id, game).then(response => {
+            if (response.status == 200) {
+                alert("Game atualizado!");
+                window.location.reload(true);
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    }
 
     axios.get("http://localhost:8080/games").then(response => {
         var games = response.data;
@@ -71,12 +112,20 @@
             item.setAttribute("data-year", game.year);
             item.setAttribute("data-price", game.price);
             item.innerHTML = game.id + " - " + game.title + " - " + game.price + " - " + game.year;
+
             var deleteBtn = document.createElement("button");
             deleteBtn.innerHTML = "Deletar";
             deleteBtn.addEventListener("click", function () {
                 deleteGame(item);
             });
-            item.append(deleteBtn);
+
+            var editBtn = document.createElement("button");
+            editBtn.innerHTML = "Editar";
+            editBtn.addEventListener("click", function () {
+                loadForm(item);
+            });
+            item.appendChild(editBtn);
+            item.appendChild(deleteBtn);
             list.appendChild(item);
         })
 
