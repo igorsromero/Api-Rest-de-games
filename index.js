@@ -73,8 +73,27 @@ var DB = {
 
 // Listar todos os jogos
 app.get("/games", auth, (req, res) => {
-    res.statusCode(200);
-    res.json(DB.games);
+
+    var HATEOS = [
+        {
+            href: "http://localhost:8080/game/0",
+            method: "DELETE",
+            rel: "delete_game"
+        },
+        {
+            href: "http://localhost:8080/game/0",
+            method: "GET",
+            rel: "get_game"
+        },
+        {
+            href: "http://localhost:8080/auth",
+            method: "POST",
+            rel: "login"
+        }
+    ]
+
+    res.statusCode = 200;
+    res.json({ games: DB.games, _links: HATEOS });
 });
 
 // Buscar por ID
@@ -85,11 +104,36 @@ app.get("/game/:id", auth, (req, res) => {
     } else {
 
         var id = parseInt(req.params.id);
+
+        var HATEOS = [
+            {
+                href: "http://localhost:8080/game/" + id,
+                method: "DELETE",
+                rel: "delete_game"
+            },
+            {
+                href: "http://localhost:8080/game/" + id,
+                method: "PUT",
+                rel: "edit_game"
+            },
+            {
+                href: "http://localhost:8080/game/" + id,
+                method: "GET",
+                rel: "get_game"
+            },
+            {
+                href: "http://localhost:8080/games",
+                method: "GET",
+                rel: "get_all_games"
+            }
+        ]
+
+
         var game = DB.games.find(g => g.id == id);
 
         if (game != undefined) {
             res.statusCode = 200;
-            res.json(game);
+            res.json({ game, _links: HATEOS });
         } else {
             res.sendStatus(404);
         }
